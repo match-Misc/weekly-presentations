@@ -1,0 +1,40 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<h1>Projects</h1>
+<div class="row">
+    {% for project in projects %}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>{{ project.name }}</h5>
+                <small class="text-muted">{{ project.get_category_display }}</small>
+            </div>
+            <div class="card-body">
+                <p><strong>Members:</strong></p>
+                <ul>
+                    {% for member in project.members.all %}
+                    <li>{{ member }}</li>
+                    {% empty %}
+                    <li>No members</li>
+                    {% endfor %}
+                </ul>
+                <p><strong>Last Presentation:</strong> {{ project.last_presentation_date|date:"d.m.Y"|default:"None" }}</p>
+                <p><strong>Past Presentations:</strong></p>
+                <ul>
+                    {% for pres in project.past_presentations %}
+                    <li>{{ pres.date|date:"d.m.Y" }}: {{ pres.topic|default:"-" }} by {{ pres.presenter }}</li>
+                    {% empty %}
+                    <li>None</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>No projects.</p>
+    {% endfor %}
+</div>
+{% endblock %}

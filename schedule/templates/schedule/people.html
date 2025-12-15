@@ -1,0 +1,49 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}People{% endblock %}
+
+{% block content %}
+<h1>People</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Projects</th>
+            <th>Last Presentation</th>
+            <th>Future Presentations</th>
+            <th>Past Presentations</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for data in people_data %}
+        <tr>
+            <td>{{ data.person }}</td>
+            <td>
+                {% for project in data.person.projects.all %}
+                {{ project.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                None
+                {% endfor %}
+            </td>
+            <td>{{ data.last_presentation_date|date:"d.m.Y"|default:"None" }}</td>
+            <td>
+                {% for pres in data.future_presentations %}
+                {{ pres.date|date:"d.m.Y" }} ({{ pres.project|default:"-" }}){% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% for pres in data.past_presentations %}
+                {{ pres.date|date:"d.m.Y" }}: {{ pres.topic|default:"-" }} ({{ pres.project|default:"-" }}){% if not forloop.last %}<br>{% endif %}
+                {% empty %}
+                None
+                {% endfor %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No people.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

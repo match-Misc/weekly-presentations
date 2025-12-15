@@ -1,0 +1,37 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}Upcoming Presentations{% endblock %}
+
+{% block content %}
+<h1>Upcoming Presentations</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>KW</th>
+            <th>Presenter</th>
+            <th>Project</th>
+            <th>Topic</th>
+            <th>Notes</th>
+            <th>ICS</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for presentation in presentations %}
+            <tr class="{{ presentation.status_class }} {% if presentation == next_presentation %}next-up{% endif %}">
+                <td>{{ presentation.date|date:"d.m.Y" }}</td>
+                <td>{{ presentation.kw }}</td>
+                <td>{{ presentation.presenter }}</td>
+                <td>{{ presentation.project|default:"-" }}</td>
+                <td>{{ presentation.topic|default:"-" }}</td>
+                <td>{{ presentation.notes|default:"-" }}</td>
+                <td><a href="{% url 'download_ics' presentation.pk %}">Download</a></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7">No upcoming presentations.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

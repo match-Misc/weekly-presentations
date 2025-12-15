@@ -1,0 +1,60 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}Schedule Presentation{% endblock %}
+
+{% block content %}
+<h1>Schedule New Presentation</h1>
+
+<h2>Persons</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Last Presentation</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for person in persons %}
+            <tr class="{% if forloop.first %}table-danger{% elif forloop.last %}table-success{% else %}table-warning{% endif %}">
+                <td><a href="?presenter={{ person.pk }}">{{ person }}</a></td>
+                <td>{{ person.last_pres|date:"d.m.Y"|default:"Never" }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="2">No persons found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Projects</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Category</th>
+            <th>Last Presentation</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in projects %}
+            <tr class="{% if forloop.first %}table-danger{% elif forloop.last %}table-success{% else %}table-warning{% endif %}">
+                <td><a href="?project={{ project.pk }}">{{ project.name }}</a></td>
+                <td>{{ project.get_category_display }}</td>
+                <td>{{ project.last_pres|date:"d.m.Y"|default:"Never" }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">No projects found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2>Create New Presentation</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Schedule Presentation</button>
+</form>
+{% endblock %}

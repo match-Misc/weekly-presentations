@@ -7,8 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python manage.py migrate
-
 EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD sh -c "if [ ! -f db.sqlite3 ]; then python manage.py migrate; fi && python manage.py runserver 0.0.0.0:8000"

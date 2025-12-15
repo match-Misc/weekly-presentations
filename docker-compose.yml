@@ -1,6 +1,6 @@
 services:
   web:
-    build: .
+    image: ghcr.io/match-misc/weekly-presentations:main
     ports:
       - "8000:8000"
     volumes:
